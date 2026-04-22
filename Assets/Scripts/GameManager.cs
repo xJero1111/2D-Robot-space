@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,6 +11,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] private CameraFollowSmooth cameraFollowSmooth;
 
     private bool isGameEnded = false;
+
+    // Update is called once per frame
+    private void Update()
+    {
+        //si el juego terminó, permitimos reiniciar con la tecla R
+        if (isGameEnded && Input.GetKeyDown(KeyCode.R))
+        {
+            RestartCurrentScene();
+        }
+    }
 
     public void EndGame(GameResult gameResult)
     {
@@ -28,6 +39,15 @@ public class GameManager : MonoBehaviour
     public void EndGrayEnding()
     {
         EndGame(GameResult.Gray);
+    }
+
+    void RestartCurrentScene()
+    {
+        //aseguramos que el tiempo vuelva a la normalidad antes de recargar la escena
+        Time.timeScale = 1f;
+
+        //recargamos la escena actual
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     void DisablePlayerControl()
